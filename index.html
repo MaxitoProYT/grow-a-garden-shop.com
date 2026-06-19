@@ -261,7 +261,7 @@
             padding: 15px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32; 1.275), box-shadow 0.2s;
         }
 
         .item-card:hover {
@@ -539,7 +539,7 @@
                     <button class="tab-btn" style="margin-left: auto; background-color: #d0ebff; border-color: var(--rbx-blue);" onclick="switchSection('about', this)">¿Quiénes Somos? ℹ️</button>
                 </div>
 
-                <!-- SECCIÓN: SEMILLAS (PRECIOS BAJOS REBAJADOS) -->
+                <!-- SECCIÓN: SEMILLAS -->
                 <div id="sec-seeds" class="shop-section active-section">
                     <div class="item-card" onclick="openDetails('Bamboo (Seed)', 2, '🎋')">
                         <div class="item-icon">🎋</div>
@@ -571,9 +571,16 @@
                         <div class="item-pack-label">Paquete de x3</div>
                         <div class="item-price-tag">6 Robux</div>
                     </div>
+                    <!-- GOLDEN SEED CON PRECIO REBAJADO (12 ROBUX EL LOTE DE 3) -->
+                    <div class="item-card" style="border-color: var(--rbx-gold);" onclick="openDetails('Golden Seed (???)', 12, '⭐')">
+                        <div class="item-icon">⭐</div>
+                        <h4 style="color: #b38600; font-weight: bold;">Golden Seed (???)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag" style="background-color: #fff9e6; color: #b38600; border: 1px solid var(--rbx-gold);">12 Robux</div>
+                    </div>
                 </div>
 
-                <!-- SECCIÓN: COSECHAS (PRECIOS BAJOS REBAJADOS) -->
+                <!-- SECCIÓN: COSECHAS -->
                 <div id="sec-crops" class="shop-section">
                     <div class="item-card" onclick="openDetails('Bamboo', 3, '🎍')">
                         <div class="item-icon">🎍</div>
@@ -689,7 +696,7 @@
             calculatedPrice: 0
         };
 
-        const palabrasSecretas = ["Frutas", "Plantas", "Semillas", "Jardín", "Robux", "Grow2", "MaxiPRO", "Verde", "Tierra", "PalaOro", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom"];
+        const palabrasSecretas = ["Frutas", "Plantas", "Semillas", "Jardín", "Robux", "Grow2", "MaxiPRO", "Verde", "Tierra", "PalaOro", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom", "Golden"];
 
         function switchPage(pageId, buttonElement) {
             if (pageId === 'tienda' && !isLoggedIn) {
