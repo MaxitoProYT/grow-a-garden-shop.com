@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grow a Garden 2 - Tienda Oficial</title>
+    <style>
+        /* --- VARIABLES DE ESTILO ROBLOX STUD 2022 (TEMÁTICA JARDÍN) --- */
+        :root {
+            --bg-dirt: #4d3319;       
+            --grass-green: #3a6b35;  
+            --light-grass: #4c8c46;  
+            --stud-gray: #e3e3e3;    
+            --stud-dark: #b8b8b8;    
+            --rbx-gold: #e6b422;     
+            --text-dark: #222222;
+            --text-light: #ffffff;
+            --rbx-blue: #00a2ff;
+        }
+
+        /* Animación del fondo de pantalla */
+        @keyframes moveBg {
+            from { background-position: 0 0, 20px 20px; }
+            to { background-position: 40px 40px, 60px 60px; }
+        }
+
+        /* Animación de entrada de elementos */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Animación pop para el modal */
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dirt);
+            background-image: radial-gradient(var(--grass-green) 20%, transparent 20%),
+                              radial-gradient(var(--grass-green) 20%, transparent 20%);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            animation: moveBg 12s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .roblox-ui {
+            background-color: var(--stud-gray);
+            width: 100%;
+            max-width: 1024px;
+            height: 680px;
+            border: 6px solid #ffffff;
+            border-bottom: 12px solid var(--stud-dark);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navbar {
+            background-color: var(--grass-green);
+            border-bottom: 6px solid #284e25;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand {
+            color: var(--text-light);
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 3px 3px 0px #1a3317;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background-color: var(--light-grass);
+            color: var(--text-light);
+            border: 3px solid #ffffff;
+            border-bottom: 6px solid #284e25;
+            padding: 8px 18px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
+        }
+
+        .nav-btn:hover:not(.disabled) {
+            transform: scale(1.05);
+            background-color: #5ca355;
+        }
+
+        .nav-btn:not(.disabled):active {
+            transform: translateY(3px) scale(0.97);
+            border-bottom-width: 3px;
+        }
+
+        .nav-btn.active {
+            background-color: var(--rbx-gold);
+            border-bottom-color: #a67c11;
+            color: var(--text-dark);
+        }
+
+        .nav-btn.disabled {
+            background-color: #7a7a7a !important;
+            border-color: #a0a0a0 !important;
+            border-bottom-color: #444444 !important;
+            color: #b0b0b0 !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none !important;
+        }
+
+        .page-container {
+            flex: 1;
+            position: relative;
+            background-color: #ebebeb;
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 25px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .page.active-page {
+            display: block;
+            animation: fadeInUp 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        h2 {
+            color: var(--text-dark);
+            font-size: 26px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid var(--stud-dark);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .login-wrapper {
+            max-width: 400px;
+            margin: 40px auto;
+            background: white;
+            border: 4px solid var(--stud-dark);
+            border-bottom: 8px solid #999;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 3px solid var(--stud-dark);
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--grass-green);
+        }
+
+        .shop-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid var(--stud-dark);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background-color: #dfdfdf;
+            border: 3px solid #b5b5b5;
+            border-bottom: 5px solid #999;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #efefef;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active-tab {
+            background-color: var(--grass-green);
+            color: white;
+            border-color: #fff;
+            border-bottom-color: #1a3317;
+            transform: none !important;
+        }
+
+        .shop-section {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .shop-section.active-section {
+            display: grid;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .item-card {
+            background: white;
+            border: 4px solid var(--stud-dark);
+            border-bottom: 8px solid #999;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+        }
+
+        .item-card:hover {
+            transform: scale(1.04) translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+            border-color: var(--light-grass);
+        }
+
+        .item-card .item-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+
+        .item-card:hover .item-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .item-card h4 {
+            font-size: 15px;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-pack-label {
+            font-size: 11px;
+            color: #777;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .item-price-tag {
+            background-color: #f1f1f1;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #008000;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        /* --- SECCIÓN ¿QUIÉNES SOMOS? --- */
+        .about-container {
+            background: white;
+            border: 4px solid var(--stud-dark);
+            border-bottom: 8px solid #999;
+            border-radius: 8px;
+            padding: 25px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .about-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .about-badge {
+            background-color: var(--rbx-blue);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* --- DETALLES DE COMPRA --- */
+        .detail-page-content {
+            background: white;
+            border: 4px solid var(--stud-dark);
+            border-bottom: 8px solid #999;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .detail-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        .multiplier-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .mult-btn {
+            background-color: #f0f0f0;
+            border: 3px solid #ccc;
+            border-bottom: 6px solid #aaa;
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text-dark);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.1s ease;
+        }
+
+        .mult-btn:active {
+            transform: translateY(3px);
+            border-bottom-width: 3px;
+        }
+
+        .mult-btn.selected-qty {
+            background-color: var(--rbx-gold);
+            border-color: #fff;
+            border-bottom-color: #a67c11;
+            color: var(--text-dark);
+            transform: translateY(2px);
+            border-bottom-width: 4px;
+        }
+
+        .total-box {
+            background: #f9f9f9;
+            border: 3px dashed var(--stud-dark);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+
+        .total-box .final-price {
+            font-size: 28px;
+            font-weight: 900;
+            color: #008000;
+        }
+
+        .buy-action-btn {
+            background-color: #00e676;
+            color: #111;
+            border: 4px solid #fff;
+            border-bottom: 8px solid #00a352;
+            padding: 14px 40px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            border-radius: 8px;
+            text-transform: uppercase;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .buy-action-btn:hover {
+            transform: scale(1.02);
+            background-color: #12f587;
+        }
+
+        .buy-action-btn:active {
+            transform: translateY(4px) scale(0.98);
+            border-bottom-width: 4px;
+        }
+
+        .back-btn {
+            background-color: #e0e0e0;
+            border: 3px solid #b5b5b5;
+            border-bottom: 5px solid #999;
+            padding: 8px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        /* --- MODAL ANIMADO --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-box {
+            background: #ffffff;
+            border: 5px solid var(--rbx-gold);
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay.active-modal .modal-box {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .modal-box h3 {
+            font-size: 22px;
+            color: #d42e2e;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .modal-text {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 20px;
+            background: #fdfae6;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px dashed #e6b422;
+        }
+
+        .token-box {
+            background: #222;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 15px 0;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="roblox-ui">
+        <nav class="navbar">
+            <div class="brand">Grow A Garden 2 🌱</div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="switchPage('login', this)">Login</button>
+                <button id="nav-tienda-btn" class="nav-btn disabled" onclick="switchPage('tienda', this)">Tienda</button>
+            </div>
+        </nav>
+
+        <div class="page-container">
+            
+            <!-- PÁGINA: INICIO DE SESIÓN -->
+            <div id="page-login" class="page active-page">
+                <h2>Inicio de Sesión</h2>
+                <div class="login-wrapper">
+                    <div class="form-group">
+                        <label>Usuario de Roblox</label>
+                        <input type="text" id="username" placeholder="Ej: RobloxPlayer123">
+                    </div>
+                    <div class="form-group">
+                        <label>Código de Verificación / PIN</label>
+                        <input type="password" placeholder="••••••••">
+                    </div>
+                    <button class="buy-action-btn" style="font-size: 16px; padding: 10px;" onclick="simularLogin()">Ingresar a la Tienda</button>
+                </div>
+            </div>
+
+            <!-- PÁGINA: TIENDA -->
+            <div id="page-tienda" class="page">
+                <h2>Tienda Oficial</h2>
+                
+                <div class="shop-tabs">
+                    <button class="tab-btn active-tab" onclick="switchSection('seeds', this)">Semillas (Seeds)</button>
+                    <button class="tab-btn" onclick="switchSection('crops', this)">Cosechas (Items)</button>
+                    <button class="tab-btn" style="margin-left: auto; background-color: #d0ebff; border-color: var(--rbx-blue);" onclick="switchSection('about', this)">¿Quiénes Somos? ℹ️</button>
+                </div>
+
+                <!-- SECCIÓN: SEMILLAS (PRECIOS BAJOS REBAJADOS) -->
+                <div id="sec-seeds" class="shop-section active-section">
+                    <div class="item-card" onclick="openDetails('Bamboo (Seed)', 2, '🎋')">
+                        <div class="item-icon">🎋</div>
+                        <h4>Bamboo (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">2 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Corn (Seed)', 3, '🌽')">
+                        <div class="item-icon">🌽</div>
+                        <h4>Corn (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">3 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Cactus (Seed)', 4, '🌵')">
+                        <div class="item-icon">🌵</div>
+                        <h4>Cactus (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">4 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Pineapple (Seed)', 5, '🍍')">
+                        <div class="item-icon">🍍</div>
+                        <h4>Pineapple (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">5 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Mushroom Seed', 6, '🍄')">
+                        <div class="item-icon">🍄</div>
+                        <h4>Mushroom Seed</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">6 Robux</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: COSECHAS (PRECIOS BAJOS REBAJADOS) -->
+                <div id="sec-crops" class="shop-section">
+                    <div class="item-card" onclick="openDetails('Bamboo', 3, '🎍')">
+                        <div class="item-icon">🎍</div>
+                        <h4>Bamboo</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">3 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Corn', 4, '🍿')">
+                        <div class="item-icon">🍿</div>
+                        <h4>Corn</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">4 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Cactus', 5, '🏜️')">
+                        <div class="item-icon">🏜️</div>
+                        <h4>Cactus</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">5 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Pineapple', 6, '🍹')">
+                        <div class="item-icon">🍹</div>
+                        <h4>Pineapple</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">6 Robux</div>
+                    </div>
+                    <div class="item-card" onclick="openDetails('Mushroom', 7, '🥣')">
+                        <div class="item-icon">🥣</div>
+                        <h4>Mushroom</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">7 Robux</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: ¿QUIÉNES SOMOS? -->
+                <div id="sec-about" class="shop-section" style="grid-template-columns: 1fr;">
+                    <div class="about-container">
+                        <div class="about-header">
+                            <span style="font-size: 32px;">🌱</span>
+                            <div>
+                                <h3>Equipo de Grow a Garden 2</h3>
+                                <span class="about-badge">Distribuidor Oficial</span>
+                            </div>
+                        </div>
+                        <p>¡Hola! Somos la plataforma oficial externa encargada de gestionar y proveer suministros premium para el ecosistema de <strong>Grow a Garden 2</strong>.</p>
+                        <br>
+                        <p>Nuestro principal objetivo es facilitar un entorno comercial seguro, accesible y verificado fuera del mercado estándar de Roblox. Nos especializamos en la distribución directa de semillas exóticas y cultivos raros procesados a precios de costo competitivos para toda la comunidad latina.</p>
+                        <br>
+                        <p><strong>¿Por qué comprar con nosotros?</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>📦 <strong>Entrega Directa:</strong> Sin intermediarios automáticos propensos a caídas.</li>
+                            <li>🔒 <strong>Autenticación Segura:</strong> Cada compra genera tokens únicos basados en palabras secretas para prevenir estafas y suplantaciones.</li>
+                            <li>⚡ <strong>Soporte Dedicado:</strong> Atención personalizada vía canales oficiales de Discord.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PÁGINA DEDICADA: DETALLES DE COMPRA -->
+            <div id="page-detalles" class="page">
+                <h2>Configuración de la Compra</h2>
+                <div class="detail-page-content">
+                    <div class="detail-icon" id="det-icon">❓</div>
+                    <h3 id="det-title" style="font-size: 22px; margin-bottom: 5px;">Nombre del Producto</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Precio Base (x3 unidades): <span id="det-base-price">0</span> Robux</p>
+                    
+                    <p style="font-weight: bold; color: #444; margin-bottom: 5px; text-align: left;">Selecciona la cantidad de lotes:</p>
+                    <div class="multiplier-container">
+                        <button class="mult-btn" id="btn-p1" onclick="setPackQuantity(1, this)">1 Lote (x3)</button>
+                        <button class="mult-btn" id="btn-p2" onclick="setPackQuantity(2, this)">2 Lotes (x6)</button>
+                        <button class="mult-btn" id="btn-p5" onclick="setPackQuantity(5, this)">5 Lotes (x15)</button>
+                        <button class="mult-btn" id="btn-p10" onclick="setPackQuantity(10, this)">10 Lotes (x30)</button>
+                    </div>
+
+                    <div class="total-box">
+                        <p>Total a recibir: <span id="qty-summary" style="font-weight: bold; color: var(--grass-green);">3</span> unidades</p>
+                        <div class="final-price"><span id="det-total-price">0</span> Robux</div>
+                    </div>
+
+                    <button class="buy-action-btn" onclick="procesarOrdenCompra()">Proceder con la Compra</button>
+                    <button class="back-btn" onclick="goBackToShop()">← Volver a la Tienda</button>
+                </div>
+            </div>
+
+            <!-- INTERFAZ MODAL: INSTRUCCIONES DE CONTACTO DIRECTO -->
+            <div id="purchase-modal" class="modal-overlay">
+                <div class="modal-box">
+                    <h3>⚠️ Orden de Compra Generada</h3>
+                    <div class="modal-text">
+                        Para completar el pago de tus ítems, debes ponerte en contacto de inmediato enviando un mensaje privado (DM).
+                        <br><br>
+                        <strong>Contacto de entrega:</strong> 
+                        <span style="color: #0055ff; font-weight: bold;">maxitoproyt_oficial</span> en Discord.
+                        <br><br>
+                        Copia y pega el siguiente código de validación en tu mensaje:
+                        <div class="token-box" id="token-display">Palabra Secreta: Frutas</div>
+                    </div>
+                    <button class="buy-action-btn" style="background-color: var(--grass-green); color: white; border-bottom-color: #1a3317;" onclick="cerrarModal()">Entendido</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- --- LÓGICA JAVASCRIPT --- -->
+    <script>
+        let isLoggedIn = false;
+        let globalUsername = "";
+
+        let currentItem = {
+            name: "",
+            basePrice: 0,
+            packMultiplier: 1,
+            calculatedPrice: 0
+        };
+
+        const palabrasSecretas = ["Frutas", "Plantas", "Semillas", "Jardín", "Robux", "Grow2", "MaxiPRO", "Verde", "Tierra", "PalaOro", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom"];
+
+        function switchPage(pageId, buttonElement) {
+            if (pageId === 'tienda' && !isLoggedIn) {
+                alert("⛔ ACCESO DENEGADO: Debes iniciar sesión antes de ingresar a la tienda.");
+                return;
+            }
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            if (buttonElement) buttonElement.classList.add('active');
+        }
+
+        function switchSection(sectionId, tabElement) {
+            document.querySelectorAll('.shop-section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active-tab'));
+
+            document.getElementById('sec-' + sectionId).classList.add('active-section');
+            tabElement.classList.add('active-tab');
+        }
+
+        function openDetails(name, basePrice, icon) {
+            currentItem.name = name;
+            currentItem.basePrice = basePrice;
+            
+            document.getElementById('det-icon').innerText = icon;
+            document.getElementById('det-title').innerText = name;
+            document.getElementById('det-base-price').innerText = basePrice;
+
+            setTimeout(() => {
+                document.getElementById('btn-p1').click();
+            }, 50);
+
+            switchPage('detalles', null);
+        }
+
+        function setPackQuantity(packQty, element) {
+            document.querySelectorAll('.mult-btn').forEach(btn => btn.classList.remove('selected-qty'));
+            element.classList.add('selected-qty');
+
+            currentItem.packMultiplier = packQty;
+            let finalPrice = currentItem.basePrice * packQty;
+            currentItem.calculatedPrice = finalPrice;
+
+            document.getElementById('qty-summary').innerText = packQty * 3;
+            document.getElementById('det-total-price').innerText = finalPrice;
+        }
+
+        function goBackToShop() {
+            switchPage('tienda', null);
+            document.getElementById('nav-tienda-btn').classList.add('active');
+        }
+
+        function simularLogin() {
+            const user = document.getElementById('username').value.trim();
+            if(user === "") {
+                alert("Por favor ingresa tu usuario de Roblox.");
+            } else {
+                isLoggedIn = true;
+                globalUsername = user;
+                const tiendaBtn = document.getElementById('nav-tienda-btn');
+                tiendaBtn.classList.remove('disabled');
+                alert("¡Bienvenido, " + user + "! Sesión sincronizada. La tienda ha sido desbloqueada.");
+                switchPage('tienda', tiendaBtn);
+            }
+        }
+
+        function procesarOrdenCompra() {
+            let palabraAleatoria = palabrasSecretas[Math.floor(Math.random() * palabrasSecretas.length)];
+            let idAleatorio = Math.floor(1000 + Math.random() * 9000);
+            let totalUnidades = currentItem.packMultiplier * 3;
+            
+            let tokenFormateado = `(Palabra Secreta: ${palabraAleatoria}) - COMPRA: [${totalUnidades}x ${currentItem.name.toUpperCase()}] - COSTO: ${currentItem.calculatedPrice} ROBUX - USER: ${globalUsername.toUpperCase()}_#${idAleatorio}`;
+
+            document.getElementById('token-display').innerText = tokenFormateado;
+            
+            const modal = document.getElementById('purchase-modal');
+            modal.style.display = 'flex';
+            modal.classList.add('active-modal');
+        }
+
+        function cerrarModal() {
+            const modal = document.getElementById('purchase-modal');
+            modal.style.display = 'none';
+            modal.classList.remove('active-modal');
+            goBackToShop();
+        }
+    </script>
+</body>
+</html>
