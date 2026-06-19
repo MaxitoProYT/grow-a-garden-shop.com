@@ -261,7 +261,7 @@
             padding: 15px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32; 1.275), box-shadow 0.2s;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
         }
 
         .item-card:hover {
@@ -513,7 +513,6 @@
 
         <div class="page-container">
             
-            <!-- PÁGINA: INICIO DE SESIÓN -->
             <div id="page-login" class="page active-page">
                 <h2>Inicio de Sesión</h2>
                 <div class="login-wrapper">
@@ -529,7 +528,6 @@
                 </div>
             </div>
 
-            <!-- PÁGINA: TIENDA -->
             <div id="page-tienda" class="page">
                 <h2>Tienda Oficial</h2>
                 
@@ -539,7 +537,6 @@
                     <button class="tab-btn" style="margin-left: auto; background-color: #d0ebff; border-color: var(--rbx-blue);" onclick="switchSection('about', this)">¿Quiénes Somos? ℹ️</button>
                 </div>
 
-                <!-- SECCIÓN: SEMILLAS -->
                 <div id="sec-seeds" class="shop-section active-section">
                     <div class="item-card" onclick="openDetails('Bamboo (Seed)', 2, '🎋')">
                         <div class="item-icon">🎋</div>
@@ -559,6 +556,12 @@
                         <div class="item-pack-label">Paquete de x3</div>
                         <div class="item-price-tag">4 Robux</div>
                     </div>
+                    <div class="item-card" onclick="openDetails('Grape (Seed)', 5, '🍇')">
+                        <div class="item-icon">🍇</div>
+                        <h4>Grape (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">5 Robux</div>
+                    </div>
                     <div class="item-card" onclick="openDetails('Pineapple (Seed)', 5, '🍍')">
                         <div class="item-icon">🍍</div>
                         <h4>Pineapple (Seed)</h4>
@@ -571,7 +574,12 @@
                         <div class="item-pack-label">Paquete de x3</div>
                         <div class="item-price-tag">6 Robux</div>
                     </div>
-                    <!-- GOLDEN SEED CON PRECIO REBAJADO (12 ROBUX EL LOTE DE 3) -->
+                    <div class="item-card" onclick="openDetails('Banana (Seed)', 10, '🍌')">
+                        <div class="item-icon">🍌</div>
+                        <h4>Banana (Seed)</h4>
+                        <div class="item-pack-label">Paquete de x3</div>
+                        <div class="item-price-tag">10 Robux</div>
+                    </div>
                     <div class="item-card" style="border-color: var(--rbx-gold);" onclick="openDetails('Golden Seed (???)', 12, '⭐')">
                         <div class="item-icon">⭐</div>
                         <h4 style="color: #b38600; font-weight: bold;">Golden Seed (???)</h4>
@@ -580,7 +588,6 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN: COSECHAS -->
                 <div id="sec-crops" class="shop-section">
                     <div class="item-card" onclick="openDetails('Bamboo', 3, '🎍')">
                         <div class="item-icon">🎍</div>
@@ -600,6 +607,12 @@
                         <div class="item-pack-label">Lote de x3</div>
                         <div class="item-price-tag">5 Robux</div>
                     </div>
+                    <div class="item-card" onclick="openDetails('Grape', 5, '🍇')">
+                        <div class="item-icon">🍇</div>
+                        <h4>Grape</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">5 Robux</div>
+                    </div>
                     <div class="item-card" onclick="openDetails('Pineapple', 6, '🍹')">
                         <div class="item-icon">🍹</div>
                         <h4>Pineapple</h4>
@@ -612,9 +625,20 @@
                         <div class="item-pack-label">Lote de x3</div>
                         <div class="item-price-tag">7 Robux</div>
                     </div>
+                    <div class="item-card" onclick="openDetails('Banana', 10, '🍌')">
+                        <div class="item-icon">🍌</div>
+                        <h4>Banana</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag">10 Robux</div>
+                    </div>
+                    <div class="item-card" style="border-color: #2e7d32;" onclick="openDetails('Beanstalk (Fruit)', 15, '🌱')">
+                        <div class="item-icon">🌱</div>
+                        <h4 style="color: #1b5e20; font-weight: bold;">Beanstalk (Fruit)</h4>
+                        <div class="item-pack-label">Lote de x3</div>
+                        <div class="item-price-tag" style="background-color: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;">15 Robux</div>
+                    </div>
                 </div>
 
-                <!-- SECCIÓN: ¿QUIÉNES SOMOS? -->
                 <div id="sec-about" class="shop-section" style="grid-template-columns: 1fr;">
                     <div class="about-container">
                         <div class="about-header">
@@ -638,7 +662,6 @@
                 </div>
             </div>
 
-            <!-- PÁGINA DEDICADA: DETALLES DE COMPRA -->
             <div id="page-detalles" class="page">
                 <h2>Configuración de la Compra</h2>
                 <div class="detail-page-content">
@@ -664,7 +687,6 @@
                 </div>
             </div>
 
-            <!-- INTERFAZ MODAL: INSTRUCCIONES DE CONTACTO DIRECTO -->
             <div id="purchase-modal" class="modal-overlay">
                 <div class="modal-box">
                     <h3>⚠️ Orden de Compra Generada</h3>
@@ -684,7 +706,6 @@
         </div>
     </div>
 
-    <!-- --- LÓGICA JAVASCRIPT --- -->
     <script>
         let isLoggedIn = false;
         let globalUsername = "";
@@ -696,9 +717,21 @@
             calculatedPrice: 0
         };
 
-        const palabrasSecretas = ["Frutas", "Plantas", "Semillas", "Jardín", "Robux", "Grow2", "MaxiPRO", "Verde", "Tierra", "PalaOro", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom", "Golden"];
+        // --- SISTEMA DE AUDIO ROBLOX ---
+        const robloxClickSound = new Audio('button.wav');
+
+        function playRobloxClick() {
+            robloxClickSound.currentTime = 0; // Reinicia por si hay clicks muy rápidos
+            robloxClickSound.play().catch(err => {
+                console.log("Audio bloqueado temporalmente por restricciones del navegador.");
+            });
+        }
+
+        const palabrasSecretas = ["Frutas", "Plantas", "Semillas", "Jardín", "Robux", "Grow2", "MaxiPRO", "Verde", "Tierra", "PalaOro", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom", "Golden", "Grapes", "Banana", "Beanstalk"];
 
         function switchPage(pageId, buttonElement) {
+            playRobloxClick(); 
+            
             if (pageId === 'tienda' && !isLoggedIn) {
                 alert("⛔ ACCESO DENEGADO: Debes iniciar sesión antes de ingresar a la tienda.");
                 return;
@@ -711,6 +744,8 @@
         }
 
         function switchSection(sectionId, tabElement) {
+            playRobloxClick(); 
+            
             document.querySelectorAll('.shop-section').forEach(sec => sec.classList.remove('active-section'));
             document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active-tab'));
 
@@ -719,6 +754,8 @@
         }
 
         function openDetails(name, basePrice, icon) {
+            playRobloxClick(); 
+            
             currentItem.name = name;
             currentItem.basePrice = basePrice;
             
@@ -734,6 +771,8 @@
         }
 
         function setPackQuantity(packQty, element) {
+            playRobloxClick(); 
+            
             document.querySelectorAll('.mult-btn').forEach(btn => btn.classList.remove('selected-qty'));
             element.classList.add('selected-qty');
 
@@ -746,11 +785,14 @@
         }
 
         function goBackToShop() {
+            playRobloxClick(); 
             switchPage('tienda', null);
             document.getElementById('nav-tienda-btn').classList.add('active');
         }
 
         function simularLogin() {
+            playRobloxClick(); 
+            
             const user = document.getElementById('username').value.trim();
             if(user === "") {
                 alert("Por favor ingresa tu usuario de Roblox.");
@@ -765,6 +807,8 @@
         }
 
         function procesarOrdenCompra() {
+            playRobloxClick(); 
+            
             let palabraAleatoria = palabrasSecretas[Math.floor(Math.random() * palabrasSecretas.length)];
             let idAleatorio = Math.floor(1000 + Math.random() * 9000);
             let totalUnidades = currentItem.packMultiplier * 3;
@@ -779,6 +823,8 @@
         }
 
         function cerrarModal() {
+            playRobloxClick(); 
+            
             const modal = document.getElementById('purchase-modal');
             modal.style.display = 'none';
             modal.classList.remove('active-modal');
